@@ -3,12 +3,20 @@ package ds.tree;
 /**
  * Created by ygpark2 on 16. 2. 17.
  */
-public class TreeNode<T> {
+public class TreeNode<T extends Comparable<T>> {
     private T val;
 
     private TreeNode left;
 
     private TreeNode right;
+
+    public TreeNode() {
+
+    }
+
+    public TreeNode(T val) {
+        this.val = val;
+    }
 
     public TreeNode getLeft() {
         return left;
