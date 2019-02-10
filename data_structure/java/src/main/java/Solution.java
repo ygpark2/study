@@ -4,8 +4,10 @@ import java.security.*;
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.Supplier;
 import java.util.regex.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Solution {
 
@@ -44,26 +46,94 @@ public class Solution {
    */
   static double[] runningMedian(int[] a) {
     double[] medianArray = new double[a.length];
-    for (int i = 0; i < a.length; i++) {
-      int pos = i + 1;
-      int[] subArray = Arrays.copyOfRange(a, 0, pos);
-      Arrays.sort(subArray);
-      int mid = pos % 2;
-      if (mid == 0) {
-          int posIdx = pos / 2;
-          double sum = subArray[posIdx-1] + subArray[posIdx];
-          medianArray[i] = Math.round(sum / 2 * 10.0) / 10.0;
-      } else {
-        if (i == 0) {
-          medianArray[i] = a[i];
+    PriorityQueue<Integer> minHeap = new PriorityQueue<>(a.length);
+    PriorityQueue<Integer> maxHeap = new PriorityQueue<>(a.length, Collections.reverseOrder());
+    for(int idx = 0; idx < a.length; idx++) {
+      int num = a[idx];
+      if (minHeap.size() == 0) {
+        minHeap.add(num);
+      } else if (maxHeap.size() == minHeap.size()) {
+        if (minHeap.peek() > num) {
+          maxHeap.add(num);
         } else {
-          int posIdx = pos / 2;
-          medianArray[i] = subArray[posIdx];
+          minHeap.add(num);
         }
+      } else {
+        if (maxHeap.size() < minHeap.size()) {
+          if (minHeap.peek() < num) {
+            minHeap.add(num);
+            maxHeap.add(minHeap.poll());
+          } else {
+            maxHeap.add(num);
+          }
+        } else {
+          if (minHeap.peek() < num) {
+            minHeap.add(num);
+          } else {
+            maxHeap.add(num);
+            minHeap.add(maxHeap.poll());
+          }
+        }
+
       }
-      System.out.println(medianArray[i]);
+
+      if (minHeap.size() == maxHeap.size()) {
+        double sum = minHeap.peek() + maxHeap.peek();
+        medianArray[idx] = Math.round(sum / 2 * 10.0) / 10.0;
+      } else {
+          if (maxHeap.size() > minHeap.size()){
+            medianArray[idx] = maxHeap.peek();
+          } else {
+            medianArray[idx] = minHeap.peek();
+          }
+      }
     }
     return medianArray;
+  }
+
+  /*
+   * Complete the minimumAverage function below.
+   */
+  static int minimumAverage(int[][] customers) {
+    List<Integer> calList = new ArrayList<>();
+    HashMap<Integer, Integer> hm = new HashMap<>();
+
+    Stream<Map.Entry<Integer, Integer>> sorted = hm.entrySet().stream()
+            .sorted(Map.Entry.comparingByValue());
+
+    long maxLen = sorted.count();
+    for(int idx = 0; idx < maxLen; idx++) {
+
+    }
+    /*
+    sorted.forEachOrdered(v -> {
+      int time = 0;
+      for (int innerIdx = 0; innerIdx < v.getKey() + 1; innerIdx++) {
+        time += customers[v.getKey()][1];
+      }
+      calList.add(time - v.getKey());
+    });
+    for (int idx = 0; idx < customers.length; idx++) {
+      int time = 0;
+      for (int innerIdx = 0; innerIdx < idx + 1; innerIdx++) {
+        time += customers[idx][1];
+      }
+      calList.add(time - customers[idx][0]);
+    }
+    */
+    Supplier<Stream<Map.Entry<Integer, Integer>>> streamSupplier
+            = () -> hm.entrySet().stream()
+                    .sorted(Map.Entry.comparingByValue());
+
+
+    long maxCnt = streamSupplier.get().count();
+    // int maxLen = customers.length;
+    for (int idx = 0; idx < maxCnt; idx++) {
+      int time = streamSupplier.get().limit(idx).mapToInt(v -> v.getValue()).reduce(0, (x,y) -> x+y) - customers[idx][0];
+      calList.add(time);
+    }
+    System.out.println(calList);
+    return 0;
   }
 
 
@@ -90,57 +160,251 @@ public class Solution {
       return "NO";
   }
 
-  private static final Scanner scanner = new Scanner(System.in);
+
+  static List<List<Integer>> ClosestXdestinations(int numDestinations,
+                                           List<List<Integer>> allLocations,
+                                           int numDeliveries)
+  {
+    // WRITE YOUR CODE HERE
+    HashMap<Integer, Double> hm = new99.95 HashMap<>();
+    int index = 0;
+    for(List<Integer> allocation: allLocations) {
+      double val = Math.sqrt(Math.pow(allocation.get(0), 2) + Math.pow(allocation.get(1), 2));
+      hm.put(index, val);
+      index++;
+    }
+    Stream<Map.Entry<Integer, Double>> sorted = hm.entrySet().stream()
+            .sorted(Map.Entry.comparingByValue()).limit(numDeliveries);
+
+    List<List<Integer>> result = new ArrayList<>();
+    sorted.forEachOrdered(v -> {
+      result.add(allLocations.get(v.getKey()));
+    });
+    return result;
+  }
+
+  private static int min(int x, int y, int z)
+  {
+    if (x < y)
+      return (x < z)? x : z;
+    else
+      return (y < z)? y : z;
+  }
+
+  private static int getCost(int cost) {
+    return cost == 0 ? 1000 : cost;
+  }
+
+  private static int minCost(List<List<Integer>> cost, int row, int col)
+  {
+    int i, j;
+    int tc[][]=new int[row+1][col+1];
+
+    tc[0][0] = getCost(cost.get(0).get(0));
+
+    /* Initialize first column of total cost(tc) array */
+    for (i = 1; i <= row; i++)
+      tc[i][0] = tc[i-1][0] + getCost(cost.get(i).get(0));
+
+    /* Initialize first row of tc array */
+    for (j = 1; j <= col; j++)
+      tc[0][j] = tc[0][j-1] + getCost(cost.get(0).get(j));
+
+    /* Construct rest of the tc array */
+    for (i = 1; i <= row; i++)
+      for (j = 1; j <= col; j++)
+        tc[i][j] = min(tc[i-1][j-1],
+                tc[i-1][j],
+                tc[i][j-1]) + getCost(cost.get(i).get(j));
+
+    return tc[row][col];
+  }
+
+  static int[][] findDestination(int numRows, int numColumns, List<List<Integer>> area) {
+    int[][] dest = new int[0][0];
+    for (int i = 0; i < numRows; i ++) {
+      for (int j = 0; j < numColumns; j++) {
+        if(area.get(i).get(j) == 9) {
+
+        }
+      }
+    }
+    return dest;
+  }
+
+  private static boolean isSafe(List<List<Integer>> mat, int visited[][], int x, int y) {
+    return !(mat.get(x).get(y) == 0 || visited[x][y] != 0);
+  }
+
+  private static boolean isValid(int xLimit, int yLimit, int x, int y) {
+    return (x < xLimit && y < yLimit && x >= 0 && y >= 0);
+  }
+
+  public static int findShortestPath(List<List<Integer>> mat, int visited[][],
+                                     int startRow, int startCol, int destRow, int destCol, int min_dist, int dist)
+  {
+    int xLimit = mat.size();
+    int yLimit = mat.get(0).size();
+
+    // System.out.println(" xLimit => " + xLimit + " yLimit => " + yLimit);
+
+    // if destination is found, update min_dist
+    if (startRow == destRow && startCol == destCol)
+    {
+      return Integer.min(dist, min_dist);
+    }
+
+    // set (i, j) cell as visited
+    visited[startRow][startCol] = 1;
+
+    // go to bottom cell
+    if (isValid(xLimit, yLimit, startRow + 1, startCol) && isSafe(mat, visited, startRow + 1, startCol)) {
+      min_dist = findShortestPath(mat, visited, startRow + 1, startCol, destRow, destCol, min_dist, dist + 1);
+    }
+
+    // go to right cell
+    if (isValid(xLimit, yLimit, startRow, startCol + 1) && isSafe(mat, visited, startRow, startCol + 1)) {
+      min_dist = findShortestPath(mat, visited, startRow, startCol + 1, destRow, destCol, min_dist, dist + 1);
+    }
+
+    // go to top cell
+    if (isValid(xLimit, yLimit, startRow - 1, startCol) && isSafe(mat, visited, startRow - 1, startCol)) {
+      min_dist = findShortestPath(mat, visited, startRow - 1, startCol, destRow, destCol, min_dist, dist + 1);
+    }
+
+    // go to left cell
+    if (isValid(xLimit, yLimit, startRow, startCol - 1) && isSafe(mat, visited, startRow, startCol - 1)) {
+      min_dist = findShortestPath(mat, visited, startRow, startCol - 1, destRow, destCol, min_dist, dist + 1);
+    }
+
+    // Backtrack - Remove (i, j) from visited matrix
+    visited[startRow][startCol] = 0;
+
+    return min_dist;
+  }
+
+  static int minimumDistance(int numRows, int numColumns, List<List<Integer>> area)
+  {
+    // WRITE YOUR CODE HERE
+    int colLimit = area.size();
+    int rowLimit = area.get(0).size();
+    int[][] visited = new int[colLimit][rowLimit];
+    int result = findShortestPath(area, visited, 0, 0, 4, 3, Integer.MAX_VALUE, 0);
+
+    System.out.println("result => " + result);
+
+    int[][] sum = new int[numRows][numColumns];
+
+    sum[0][0] = area.get(0).get(0);
+
+    for (int i = 0; i < numRows; i ++) {
+      for (int j = 0; j < numColumns; j++) {
+        if (i == 0) {
+          if (j == 0) {
+            sum[i][j] = area.get(i).get(j);
+          }
+          else {
+            sum[i][j] = sum[i][j - 1] + area.get(i).get(j);
+          }
+        }
+        else if (j == 0) {
+          if (i == 0) sum[i][j] = area.get(i).get(j);
+          else  sum[i][j] = sum[i-1][j] + area.get(i).get(j);
+        } else {
+          sum[i][j] = Math.min(sum[i-1][j], sum[i][j-1]) + area.get(i).get(j);
+        }
+      }
+    }
+
+    /*
+    1 1 1 1
+    0 1 1 1
+    0 1 0 1
+    1 1 9 1
+    0 0 1 1
+     */
+    int row = sum.length;
+    int col = sum[0].length;
+    for (int i = 0; i < row; i ++) {
+      for (int j = 0; j < col; j++) {
+        System.out.print(sum[i][j] + " ");
+      }
+      System.out.println("---------- new row -----------------");
+    }
+    return sum[numRows - 1][numColumns - 1] + 1;
+  }
 
   public static void main(String[] args) throws IOException {
-/*
-    BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
 
-    int t = scanner.nextInt();
-    scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+    List<List<Integer>> a = new ArrayList<>();
+    ArrayList<Integer> list1 = new ArrayList<Integer>() {{
+      add(1);
+      add(1);
+      add(1);
+      add(1);
+    }};
 
-3
-{[()]}
-{[(])}
-{{[[(())]]}}
+    ArrayList<Integer> list2 = new ArrayList<Integer>() {{
+      add(0);
+      add(1);
+      add(1);
+      add(1);
+    }};
 
-{(([])[])[]}
-{(([])[])[]]}
-{(([])[])[]}[]
-*/
+    ArrayList<Integer> list3 = new ArrayList<Integer>() {{
+      add(0);
+      add(1);
+      add(0);
+      add(1);
+    }};
+
+    ArrayList<Integer> list4 = new ArrayList<Integer>() {{
+      add(1);
+      add(1);
+      add(9);
+      add(1);
+    }};
+
+    ArrayList<Integer> list5 = new ArrayList<Integer>() {{
+      add(0);
+      add(0);
+      add(1);
+      add(1);
+    }};
+    a.add(list1);
+    a.add(list2);
+    a.add(list3);
+    a.add(list4);
+    a.add(list5);
+
+    System.out.println( minCost(a, 4, 3) );
+    int r = minimumDistance(4, 3, a);
+    System.out.println(r);
+    /*
+    List<List<Integer>> a = new ArrayList<>();
+    ArrayList<Integer> list1 = new ArrayList<Integer>() {{
+      add(1);
+      add(2);
+    }};
+
+    ArrayList<Integer> list2 = new ArrayList<Integer>() {{
+      add(3);
+      add(4);
+    }};
+
+    ArrayList<Integer> list3 = new ArrayList<Integer>() {{
+      add(1);
+      add(-1);
+    }};
+    a.add(list1);
+    a.add(list2);
+    a.add(list3);
+    System.out.println( ClosestXdestinations(3, a, 2) );
+    */
+
     System.out.println(makeAnagram("fcrxzwscanmligyxyvym","jxwtrhvujlmrpdoqbisbwhmgpmeoke"));
     System.out.println(makeAnagram("abc","cde"));
 
-
-    /*
-      37632.0
-23875.0
-25334.0
-31483.0
-37632.0
-61125.0
-84618.0
-85978.5
-84618.0
-85978.5
-84618.0
-85978.5
-84618.0
-65440.0
-65147.0
-55704.5
-49990.0
-53674.5
-49990.0
-53674.5
-
-12.0
-8.0
-5.0
-4.5
-5.0
-6.0
-     */
     int[] param = {37632,
         10118,
         25334,
@@ -162,12 +426,14 @@ public class Solution {
         18685};
 
         // {1,2,3,4,5,6,7,8,9,10};
-    System.out.println(runningMedian(param));
+    runningMedian(param);
     // String s = "{[()]}";
     String s = "{(([])[])[]]}";
     // String s = "{{[[(())]]}}";
     String result = isBalanced(s);
     System.out.println(result);
 
+    int[][] avgArray = {{0,3}, {1,9}, {2,5}};
+    minimumAverage(avgArray);
   }
 }
