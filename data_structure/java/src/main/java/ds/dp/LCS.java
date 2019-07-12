@@ -7,7 +7,7 @@ public class LCS {
   }
 
   public int lcs(String a, String b, int aLen, int bLen) {
-    if (aLen == 0 && bLen == 0)
+    if (aLen == 0 || bLen == 0)
       return 0;
 
     char[] aCharArray = a.toCharArray();

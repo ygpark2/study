@@ -48,7 +48,7 @@ public class Application {
         });
 
         LCS lcs = new LCS();
-        int matchSize = lcs.lcs("axbxcxdx", "abc", "axbxcxdx".length(), "abc".length());
+        int matchSize = lcs.lcs("axbxcxdx", "abc", "axbxcxdx".length() - 1, "abc".length() - 1);
         System.out.println("matchSize => " + matchSize);
 
     }
