@@ -66,6 +66,12 @@ public class Solution {
     return medianArray;
   }
 
+  /*
+  static String[] lcs(String a, String b, int aLen, int bLen) {
+
+
+  }
+  */
 
   // Complete the isBalanced function below.
   static String isBalanced(String s) {
