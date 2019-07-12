@@ -1,4 +1,5 @@
 import ds.dp.ATM;
+import ds.dp.LCS;
 import ds.tree.BinaryTree;
 import ds.tree.Tree;
 import ds.tree.TreeNode;
@@ -46,6 +47,9 @@ public class Application {
             System.out.println("new val value => " + v);
         });
 
+        LCS lcs = new LCS();
+        int matchSize = lcs.lcs("axbxcxdx", "abc", "axbxcxdx".length(), "abc".length());
+        System.out.println("matchSize => " + matchSize);
 
     }
 }
