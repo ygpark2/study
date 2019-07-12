@@ -41,14 +41,15 @@ public class Application {
 
         ATM atm = new ATM();
         Map<Integer, Integer> moneyMap = new HashMap<>();
-        Map<Integer, Integer> val = atm.widthdraw(455, atm.getMoneyInfoMap().size() -1, moneyMap);
+        Map<Integer, Integer> val = atm.widthdraw(665, atm.getMoneyInfoMap().size() -1, moneyMap);
         val.forEach((k, v) -> {
-            System.out.println("new val key => " + k);
-            System.out.println("new val value => " + v);
+            System.out.println("money note => " + k + " note count => " + v);
         });
 
         LCS lcs = new LCS();
-        int matchSize = lcs.lcs("axbxcxdx", "abc", "axbxcxdx".length() - 1, "abc".length() - 1);
+        String lcsa = "axbxcxdx";
+        String lcsb = "abc";
+        int matchSize = lcs.lcs(lcsa, lcsb, lcsa.length() - 1, lcsb.length() - 1);
         System.out.println("matchSize => " + matchSize);
 
     }
