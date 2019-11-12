@@ -1,3 +1,4 @@
+import ds.bit.BitOperation;
 import ds.dp.ATM;
 import ds.dp.LCS;
 import ds.tree.BinaryTree;
@@ -48,9 +49,11 @@ public class Application {
 
         LCS lcs = new LCS();
         String lcsa = "axbxcxdx";
-        String lcsb = "abc";
-        int matchSize = lcs.lcs(lcsa, lcsb, lcsa.length() - 1, lcsb.length() - 1);
+        String lcsb = "abcd";
+        int matchSize = lcs.lcs(lcsa, lcsb, lcsa.length(), lcsb.length());
         System.out.println("matchSize => " + matchSize);
 
+        BitOperation bo = new BitOperation();
+        System.out.println(bo.updateBit(169, 3, false));
     }
 }

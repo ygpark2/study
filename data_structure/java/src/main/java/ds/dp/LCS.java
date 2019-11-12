@@ -12,10 +12,10 @@ public class LCS {
 
     char[] aCharArray = a.toCharArray();
     char[] bCharArray = b.toCharArray();
-    if (aCharArray[aLen] == bCharArray[bLen]) {
+    if (aCharArray[aLen - 1] == bCharArray[bLen - 1]) {
       return 1 + lcs(a, b, aLen - 1 , bLen - 1);
     } else {
-      return lcs(a, b, aLen - 1, bLen) + lcs(a, b, aLen, bLen - 1);
+      return Math.max(lcs(a, b, aLen - 1, bLen), lcs(a, b, aLen, bLen - 1));
     }
   }
 }
