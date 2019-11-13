@@ -34,25 +34,41 @@ public class Application {
         System.out.println("search 3 => " + bst.search(3));
         System.out.println("search 4 => " + bst.search(4));
 
+        bst.delete(13);
+        bst.preOrderTraversal();
+        System.out.println("----------------------------");
+        bst.inOrderTraversal();
+        System.out.println("----------------------------");
+        bst.postOrderTraversal();
+        System.out.println("----------------------------");
+
+
+
+
+        System.out.println("----------------------------- Binary Tree -------------------------------");
+
         int[] intList = {1,2,3,5,7,8,9,11,12,13,33};
         BinaryTree bt = new BinaryTree();
         bt.makeTree(intList);
         System.out.println(bt.root.getVal());
         bt.searchBtree(bt.root, 2);
 
+        System.out.println("---------------------------------- ATM -----------------------------------");
         ATM atm = new ATM();
         Map<Integer, Integer> moneyMap = new HashMap<>();
-        Map<Integer, Integer> val = atm.widthdraw(665, atm.getMoneyInfoMap().size() -1, moneyMap);
+        Map<Integer, Integer> val = atm.widthdraw(1965, atm.getMoneyInfoMap().size() - 1, moneyMap);
         val.forEach((k, v) -> {
             System.out.println("money note => " + k + " note count => " + v);
         });
 
+        System.out.println("---------------------------------- LCS -----------------------------------");
         LCS lcs = new LCS();
         String lcsa = "axbxcxdx";
         String lcsb = "abcd";
         int matchSize = lcs.lcs(lcsa, lcsb, lcsa.length(), lcsb.length());
         System.out.println("matchSize => " + matchSize);
 
+        System.out.println("---------------------------- BitOperation --------------------------------");
         BitOperation bo = new BitOperation();
         System.out.println(bo.updateBit(169, 3, false));
     }
