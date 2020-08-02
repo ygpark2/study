@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 public class Arrays {
 
+    // https://practice.geeksforgeeks.org/problems/pair-with-greatest-product-in-array/0
     public int findGreatestProduct(String[] args) {
         Stream<String> valStream = Stream.of(args);
         IntStream intStream = valStream.mapToInt(num -> Integer.parseInt(num)).sorted();
