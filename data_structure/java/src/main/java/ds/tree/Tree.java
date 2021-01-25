@@ -61,20 +61,16 @@ public class Tree<T extends Comparable<T>> {
     else {
       if (tn.getVal().compareTo(delVal) > 0)
         tn.setRight(delete(tn.getRight(), delVal));
+      else if (tn.getVal().compareTo(delVal) < 0)
+        tn.setLeft(delete(tn.getLeft(), delVal));
       else {
-        if (tn.getVal().compareTo(delVal) < 0)
-          tn.setLeft(delete(tn.getLeft(), delVal));
+        if (Objects.isNull(tn.getRight()))
+          return tn.getLeft();
+        else if (Objects.isNull(tn.getLeft()))
+          return tn.getRight();
         else {
-          if (Objects.isNull(tn.getRight()))
-            return tn.getLeft();
-          else {
-            if (Objects.isNull(tn.getLeft()))
-              return tn.getRight();
-            else {
-              tn.setVal((T) retrieveData(tn.getLeft()));
-              tn.setLeft(delete(tn.getLeft(), delVal));
-            }
-          }
+          tn.setVal((T) retrieveData(tn.getLeft()));
+          tn.setLeft(delete(tn.getLeft(), delVal));
         }
       }
     }
@@ -103,7 +99,7 @@ public class Tree<T extends Comparable<T>> {
   }
 
   public void postOrderTraversal() {
-    preOrderHelper(treeNode);
+    postOrderHelper(treeNode);
   }
 
   private void postOrderHelper(TreeNode<T> preNode)

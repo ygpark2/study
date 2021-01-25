@@ -136,7 +136,6 @@ public class Solution {
     return 0;
   }
 
-
   // Complete the isBalanced function below.
   static String isBalanced(String s) {
     Map<String, String> bracketMap = new HashMap<>();
