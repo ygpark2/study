@@ -166,7 +166,7 @@ public class Solution {
                                            int numDeliveries)
   {
     // WRITE YOUR CODE HERE
-    HashMap<Integer, Double> hm = new99.95 HashMap<>();
+    HashMap<Integer, Double> hm = new HashMap<>();
     int index = 0;
     for(List<Integer> allocation: allLocations) {
       double val = Math.sqrt(Math.pow(allocation.get(0), 2) + Math.pow(allocation.get(1), 2));
