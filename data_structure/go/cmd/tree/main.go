@@ -1,9 +1,8 @@
 package main
 
 import (
+	"ds/cmd/tree/bst"
 	"fmt"
-
-	bst "./bst.go"
 )
 
 func main() {
@@ -23,15 +22,15 @@ func main() {
 
 	// Print the tree in-order
 	// Traverse the left sub-tree, root, right sub-tree
-	tree.showInOrder(test.root)
+	showInOrder(test.root)
 
 	// Print the tree pre-order
 	// Traverse the root, left sub-tree, right sub-tree
-	tree.showPreOrder(test.root)
+	showPreOrder(test.root)
 
 	// Print the tree post-order
 	// Traverse left sub-tree, right sub-tree, root
-	tree.showPostOrder(test.root)
+	showPostOrder(test.root)
 
 	// Removes the item from the tree.
 	// Returns true if removed, false if not found.
