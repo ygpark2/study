@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/ygpark2/study/tree/master/data_structure/go/cmd/tree"
+	"github.com/ygpark2/study/data_structure/go/cmd/tree"
 )
 
 func main() {
