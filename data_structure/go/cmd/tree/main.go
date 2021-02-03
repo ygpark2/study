@@ -1,14 +1,15 @@
 package main
 
 import (
-	"ds/cmd/tree/bst"
 	"fmt"
+
+	"github.com/ygpark2/study/tree/master/data_structure/go/cmd/tree"
 )
 
 func main() {
 
 	// Creating a binary search tree
-	test := bst.NewBst()
+	test := tree.NewBst()
 
 	// Inserting some data
 	test.Insert(4)
@@ -22,15 +23,15 @@ func main() {
 
 	// Print the tree in-order
 	// Traverse the left sub-tree, root, right sub-tree
-	showInOrder(test.root)
+	tree.showInOrder(test.root)
 
 	// Print the tree pre-order
 	// Traverse the root, left sub-tree, right sub-tree
-	showPreOrder(test.root)
+	tree.showPreOrder(test.root)
 
 	// Print the tree post-order
 	// Traverse left sub-tree, right sub-tree, root
-	showPostOrder(test.root)
+	tree.showPostOrder(test.root)
 
 	// Removes the item from the tree.
 	// Returns true if removed, false if not found.
